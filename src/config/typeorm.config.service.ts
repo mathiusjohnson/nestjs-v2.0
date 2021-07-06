@@ -15,15 +15,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DATABASE,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: false,
-      migrationsRun: true,
-      migrationsTableName: 'custom_migration_table',
-      migrations: [__dirname + 'migration/*.js'],
-      cli: {
-        migrationsDir: 'migration',
-      },
+      synchronize: true,
       autoLoadEntities: true,
-      logging: ['query', 'error'],
     };
   }
 }
