@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:10.5
+    hostname: postgres
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=postgres
+      - MODE=DEV
+      - RUN_MIGRATIONS=true
+
+    logging:
+      options:
+        max-size: 10m
+        max-file: '3'
+    ports:
+      - '5438:5432'
+  pgadmin:
+    image: dpage/pgadmin4
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: pwdpwd
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - '5050:80'
+
+  app-server:
+    container_name: app-server-three
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    env_file: .env
+    volumes:
+      - .:/src
+      - /src/node_modules
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      WAIT_HOSTS: postgres:5432
+      TYPEORM_HOST: postgres
+volumes:
+  postgres_data:
+  pgadmin:
