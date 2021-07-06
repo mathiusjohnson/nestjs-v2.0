@@ -1,6 +1,7 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
@@ -9,6 +10,8 @@ import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
+  private logger = new Logger('UsersRepository', true);
+
   async createUser(createUserInput: CreateUserInput): Promise<void> {
     const { username, password } = createUserInput;
 
@@ -25,6 +28,18 @@ export class UsersRepository extends Repository<User> {
       } else {
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async getUsers(): Promise<User[]> {
+    const query = this.createQueryBuilder('task');
+
+    try {
+      const tasks = await query.getMany();
+      return tasks;
+    } catch (error) {
+      this.logger.error(`Failed to get users`, error.stack);
+      throw new InternalServerErrorException();
     }
   }
 }
