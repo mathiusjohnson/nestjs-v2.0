@@ -10,7 +10,8 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  id: Int!
+  id: String!
+  username: String!
 }
 
 type Query {
