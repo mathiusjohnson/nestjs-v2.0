@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
+import { AuthResolver } from './auth.resolver';
 import { AuthController } from './auth.controller';
 import { UsersResolver } from '../users/users.resolver';
 import { UsersRepository } from '../users/users.repository';
@@ -29,7 +30,13 @@ import { UsersModule } from '../users/users.module';
     TypeOrmModule.forFeature([UsersRepository]),
     UsersModule,
   ],
-  providers: [AuthService, JwtStrategy, UsersService, UsersResolver],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    UsersService,
+    AuthResolver,
+    UsersResolver,
+  ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],
 })
