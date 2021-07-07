@@ -18,8 +18,8 @@ export class UsersService {
     return this.usersRepository.getUsers();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.usersRepository.getUser(id);
   }
 
   update(id: number, updateUserInput: UpdateUserInput) {
