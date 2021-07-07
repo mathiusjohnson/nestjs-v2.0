@@ -13,4 +13,5 @@ export class AuthCredentialsDto {
     message: 'password is too weak',
   })
   password: string;
+  token: string;
 }
