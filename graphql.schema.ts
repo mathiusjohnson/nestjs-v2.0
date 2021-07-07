@@ -19,7 +19,8 @@ export class CreateUserInput {
 }
 
 export class UpdateUserInput {
-    id: number;
+    id: string;
+    username: string;
 }
 
 export class SignupResponse {
