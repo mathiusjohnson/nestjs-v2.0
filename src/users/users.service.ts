@@ -27,6 +27,6 @@ export class UsersService {
   }
 
   remove(id: string) {
-    return `This action removes a #${id} user`;
+    return this.usersRepository.removeUser(id);
   }
 }
