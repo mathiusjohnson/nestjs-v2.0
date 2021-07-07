@@ -77,4 +77,16 @@ export class UsersRepository extends Repository<User> {
       throw new InternalServerErrorException();
     }
   }
+
+  async removeUser(id: string): Promise<string> {
+    const query = this.createQueryBuilder('user');
+    this.logger.log(id);
+    try {
+      await query.delete().where('id = :id', { id }).execute();
+      return `user with id ${id} has been removed`;
+    } catch (error) {
+      this.logger.error(`Failed to get user`, error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
 }
