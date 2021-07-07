@@ -20,7 +20,7 @@ export class AuthController {
   @Post('/signin')
   signIn(
     @Body() authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ token: string }> {
     const logger = new Logger('sign in controller');
 
     logger.verbose(
