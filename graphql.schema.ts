@@ -41,7 +41,7 @@ export abstract class IMutation {
 
     abstract updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
 
-    abstract removeUser(id: number): User | Promise<User>;
+    abstract removeUser(id: string): User | Promise<User>;
 }
 
 export class User {
@@ -53,5 +53,5 @@ export class User {
 export abstract class IQuery {
     abstract users(): User[] | Promise<User[]>;
 
-    abstract user(id: number): User | Promise<User>;
+    abstract user(id: string): User | Promise<User>;
 }
