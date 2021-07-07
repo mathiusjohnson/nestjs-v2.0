@@ -1,0 +1,29 @@
+input Signup {
+  username: String!
+  password: String!
+}
+
+input Login {
+  username: String!
+  password: String!
+}
+
+type SignupResponse {
+  token: String
+  username: String!
+  password: String!
+}
+
+type AuthPayload {
+  token: String
+  username: String!
+}
+
+type Mutation {
+  signup(input: Signup!): SignupResponse!
+  login(input: Login!): AuthPayload!
+}
+
+schema {
+  query: Query
+}
