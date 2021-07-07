@@ -7,6 +7,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
@@ -54,7 +55,25 @@ export class UsersRepository extends Repository<User> {
 
       return user;
     } catch (error) {
-      this.logger.error(`Failed to get users`, error.stack);
+      this.logger.error(`Failed to get user`, error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updateUserName(
+    id: string,
+    updateUserInput: UpdateUserInput,
+  ): Promise<User> {
+    const { username } = updateUserInput;
+    const query = this.createQueryBuilder('user');
+
+    try {
+      const user = await query.where('user.id = :id', { id }).getOne();
+      user.username = username;
+      await this.save(user);
+      return user;
+    } catch (error) {
+      this.logger.error(`Failed to update user`, error.stack);
       throw new InternalServerErrorException();
     }
   }
