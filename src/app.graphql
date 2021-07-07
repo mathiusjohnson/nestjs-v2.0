@@ -1,21 +1,22 @@
 input Signup {
   username: String!
-  email: String!
   password: String!
 }
 
 type SignupResponse {
+  token: String
   username: String!
-  email: String!
+  password: String!
 }
 
 type AuthPayload {
-  email: String!
+  token: String
+  username: String!
 }
 
 type Mutation {
   signup(input: Signup!): SignupResponse!
-  login(username: String!, password: String!): AuthPayload!
+  login(input: Login!): AuthPayload!
 }
 
 schema {
