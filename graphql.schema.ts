@@ -9,7 +9,11 @@
 /* eslint-disable */
 export class Signup {
     username: string;
-    email: string;
+    password: string;
+}
+
+export class Login {
+    username: string;
     password: string;
 }
 
@@ -24,18 +28,20 @@ export class UpdateUserInput {
 }
 
 export class SignupResponse {
+    token?: string;
     username: string;
-    email: string;
+    password: string;
 }
 
 export class AuthPayload {
-    email: string;
+    token?: string;
+    username: string;
 }
 
 export abstract class IMutation {
     abstract signup(input: Signup): SignupResponse | Promise<SignupResponse>;
 
-    abstract login(username: string, password: string): AuthPayload | Promise<AuthPayload>;
+    abstract login(input: Login): AuthPayload | Promise<AuthPayload>;
 
     abstract createUser(createUserInput: CreateUserInput): User | Promise<User>;
 
