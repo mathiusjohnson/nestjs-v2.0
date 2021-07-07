@@ -22,11 +22,11 @@ export class UsersService {
     return this.usersRepository.getUser(id);
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  updateUserName(id: string, updateUserInput: UpdateUserInput) {
+    return this.usersRepository.updateUserName(id, updateUserInput);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }
