@@ -30,7 +30,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: pwdpwd
       PGADMIN_LISTEN_PORT: 5050
     volumes:
-      - pgadmin:/root/.pgadmin
+      - pgadmin:/var/lib/pgadmin
     ports:
       - '5050:5050'
 
