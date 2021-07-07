@@ -12,7 +12,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersRepository extends Repository<User> {
   private logger = new Logger('UsersRepository', true);
 
-  async createUser(createUserInput: CreateUserInput): Promise<void> {
+  async createUser(createUserInput: CreateUserInput): Promise<User> {
     const { username, password } = createUserInput;
 
     const salt = await bcrypt.genSalt();
@@ -22,6 +22,8 @@ export class UsersRepository extends Repository<User> {
 
     try {
       await this.save(user);
+      const savedUser = this.getUser(user.id);
+      return savedUser;
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('Username already exists');
@@ -32,11 +34,25 @@ export class UsersRepository extends Repository<User> {
   }
 
   async getUsers(): Promise<User[]> {
-    const query = this.createQueryBuilder('task');
+    const query = this.createQueryBuilder('user');
 
     try {
-      const tasks = await query.getMany();
-      return tasks;
+      const users = await query.getMany();
+      return users;
+    } catch (error) {
+      this.logger.error(`Failed to get users`, error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getUser(id: string): Promise<User> {
+    const query = this.createQueryBuilder('user');
+
+    try {
+      const user = await query.where('user.id = :id', { id }).getOne();
+      console.log(user);
+
+      return user;
     } catch (error) {
       this.logger.error(`Failed to get users`, error.stack);
       throw new InternalServerErrorException();
