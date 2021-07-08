@@ -32,10 +32,10 @@ export class PostsResolver {
     return this.postsService.findOne(id);
   }
 
-  // @Query(() => [Post], { name: 'getUserPosts' })
-  // findUserPosts(id: string) {
-  //   return this.postsService.findUserPosts(id);
-  // }
+  @Query(() => [Post], { name: 'getUserPosts' })
+  findUserPosts(id: string) {
+    return this.postsService.findUserPosts(id);
+  }
 
   @Mutation((returns) => Post, { name: 'updatePost' })
   update(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
