@@ -7,7 +7,6 @@ type User {
   username: String!
   password: String!
   posts: [Post!]
-  user: Post!
 }
 
 type Post {
@@ -22,6 +21,7 @@ type Query {
   getUserById(id: String!): User!
   getAllPosts: [Post!]!
   getPostById(id: String!): Post!
+  getUserPosts: [Post!]!
 }
 
 type Mutation {

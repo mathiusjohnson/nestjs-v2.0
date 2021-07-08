@@ -32,7 +32,6 @@ export class User {
     username: string;
     password: string;
     posts?: Post[];
-    user: Post;
 }
 
 export class Post {
@@ -50,6 +49,8 @@ export abstract class IQuery {
     abstract getAllPosts(): Post[] | Promise<Post[]>;
 
     abstract getPostById(id: string): Post | Promise<Post>;
+
+    abstract getUserPosts(): Post[] | Promise<Post[]>;
 }
 
 export abstract class IMutation {
