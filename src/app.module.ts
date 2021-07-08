@@ -15,11 +15,11 @@ import { PostsModule } from './posts/posts.module';
   imports: [
     AuthModule,
     UsersModule,
-    PostsModule,
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRootAsync({
       useFactory: () => ({
         context: ({ req }) => ({ req }),
+        autoSchemaFile: join(process.cwd(), 'src/graphql-schema.gql'),
         typeDefs: [],
         resolvers: [],
         typePaths: ['./**/*.graphql'],
@@ -36,6 +36,7 @@ import { PostsModule } from './posts/posts.module';
       useClass: TypeOrmConfigService,
       inject: [ConfigService],
     }),
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
