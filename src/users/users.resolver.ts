@@ -11,11 +11,16 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Post } from 'src/posts/entities/post.entity';
-import { Logger } from '@nestjs/common';
+import { forwardRef, Inject, Logger } from '@nestjs/common';
+import { PostsService } from 'src/posts/posts.service';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @Inject(forwardRef(() => PostsService))
+    private postsService: PostsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Mutation(() => User, { name: 'createUser' })
   create(@Args('createUserInput') createUserInput: CreateUserInput) {
@@ -45,11 +50,11 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
-  @ResolveField((type) => Post)
-  user(@Parent() user: User) {
+  @ResolveField((type) => [Post])
+  posts(@Parent() user: User) {
     const logger = new Logger('get userposts in posts resolver');
     const { id } = user;
     logger.log(`id in user posts resolver: ${id}`);
-    return this.usersService.findOne(id);
+    return this.postsService.findUserPosts(id);
   }
 }
