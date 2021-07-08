@@ -2,6 +2,7 @@ type User {
   id: ID!
   username: String!
   password: String!
+  posts: [Post!]!
 }
 
 input CreateUserInput {
@@ -19,8 +20,21 @@ type Query {
   user(id: String!): User
 }
 
+type Post {
+  id: ID!
+}
+
+type PostsPayload {
+  posts: [Post]
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User
+  getUserPosts(id: String!): PostsPayload!
+}
+
+type ResolveField {
+  getUserPosts(id: String!): PostsPayload!
 }
