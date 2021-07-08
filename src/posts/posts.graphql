@@ -2,6 +2,7 @@ type Post {
   id: ID!
   text_body: String!
   poster_id: String!
+  user: User!
 }
 
 input CreatePostInput {
