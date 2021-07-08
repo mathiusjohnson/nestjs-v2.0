@@ -6,35 +6,31 @@ type User {
   id: String!
   username: String!
   password: String!
+  posts: [Post!]
 }
 
 type Post {
   id: String!
-  text_body: String!
-  poster_id: String!
+  textBody: String!
+  posterId: String!
+  user: User!
+  post: User!
 }
 
 type Query {
-  findAll: [User!]!
-  findOne(id: String!): User!
+  getAllUsers: [User!]!
+  getUserById(id: String!): User!
   getAllPosts: [Post!]!
   getPostById(id: String!): Post!
 }
 
 type Mutation {
-  signup(input: AuthCredentialsDto!): User!
-  login(input: AuthCredentialsDto!): User!
-  create(createUserInput: CreateUserInput!): User!
-  update(updateUserInput: UpdateUserInput!): User!
-  remove(id: String!): User!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: String!): Post!
-}
-
-input AuthCredentialsDto {
-  username: String!
-  password: String!
 }
 
 input CreateUserInput {
@@ -48,11 +44,11 @@ input UpdateUserInput {
 }
 
 input CreatePostInput {
-  text_body: String!
-  poster_id: String!
+  textBody: String!
+  posterId: String!
 }
 
 input UpdatePostInput {
   id: String!
-  text_body: String!
+  textBody: String!
 }

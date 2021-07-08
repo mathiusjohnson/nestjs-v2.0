@@ -18,7 +18,7 @@ export class Login {
 
 export class CreatePostInput {
   text_body: string;
-  poster_id: string;
+  posterId: string;
 }
 
 export class UpdatePostInput {
@@ -68,7 +68,7 @@ export abstract class IMutation {
 export class Post {
   id: string;
   text_body: string;
-  poster_id: string;
+  posterId: string;
 }
 
 export abstract class IQuery {
