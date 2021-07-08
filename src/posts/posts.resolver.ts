@@ -48,7 +48,7 @@ export class PostsResolver {
   }
 
   @ResolveField((type) => User)
-  post(@Parent() post: Post) {
+  user(@Parent() post: Post) {
     const logger = new Logger('get userposts in posts resolver');
     const { posterId } = post;
     logger.log(`id in user posts resolver: ${posterId}`);

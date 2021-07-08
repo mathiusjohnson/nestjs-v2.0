@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   findOne(id: string) {
-    return this.usersRepository.findOne(id);
+    return this.usersRepository.findOne(id, { relations: ['posts'] });
   }
 
   updateUserName(id: string, updateUserInput: UpdateUserInput) {
@@ -41,8 +41,4 @@ export class UsersService {
     }
     throw new NotFoundException(`Record cannot find by id ${id}`);
   }
-
-  // async getUserPosts(id: string): Promise<Post> {
-  //   return this.postsService.findOne(id);
-  // }
 }
