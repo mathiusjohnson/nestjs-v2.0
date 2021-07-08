@@ -14,9 +14,9 @@
 //   private logger = new Logger('PostsRepository', true);
 
 //   async createPost(createPostInput: CreatePostInput): Promise<Post> {
-//     const { text_body, poster_id } = createPostInput;
+//     const { textBody, posterId } = createPostInput;
 
-//     const post = this.create({ text_body, poster_id });
+//     const post = this.create({ textBody, posterId });
 
 //     try {
 //       await this.save(post);
@@ -47,7 +47,7 @@
 //     const query = this.createQueryBuilder('post');
 
 //     try {
-//       const post = await query.where('post.poster_id = :id', { id }).getOne();
+//       const post = await query.where('post.posterId = :id', { id }).getOne();
 //       console.log(post);
 
 //       return post;
@@ -57,12 +57,12 @@
 //     }
 //   }
 
-//   async getUserPosts(poster_id: string): Promise<Post[]> {
+//   async getUserPosts(posterId: string): Promise<Post[]> {
 //     const query = this.createQueryBuilder('post');
 
 //     try {
 //       const posts = await query
-//         .where('post.poster_id = :id', { poster_id })
+//         .where('post.posterId = :id', { posterId })
 //         .getMany();
 //       console.log(posts);
 
@@ -77,12 +77,12 @@
 //     id: string,
 //     updatePostInput: UpdatePostInput,
 //   ): Promise<Post> {
-//     const { text_body } = updatePostInput;
+//     const { textBody } = updatePostInput;
 //     const query = this.createQueryBuilder('post');
 
 //     try {
 //       const post = await query.where('post.id = :id', { id }).getOne();
-//       post.text_body = text_body;
+//       post.textBody = textBody;
 //       await this.save(post);
 //       return post;
 //     } catch (error) {
