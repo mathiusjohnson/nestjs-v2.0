@@ -9,7 +9,7 @@ import { User } from 'src/users/entities/user.entity';
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
-  @Mutation((returns) => User)
+  @Mutation((returns) => User, { name: 'signUp' })
   signup(@Args('input') authCredentialsDto: AuthCredentialsDto) {
     const logger = new Logger('signup controller');
 
@@ -18,7 +18,7 @@ export class AuthResolver {
     );
     return this.authService.signUp(authCredentialsDto);
   }
-  @Mutation((returns) => User)
+  @Mutation((returns) => User, { name: 'login' })
   login(@Args('input') authCredentialsDto: AuthCredentialsDto) {
     const logger = new Logger('sign in controller');
 
