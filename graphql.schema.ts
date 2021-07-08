@@ -7,24 +7,9 @@
 
 /* tslint:disable */
 /* eslint-disable */
-export class Signup {
+export class AuthCredentialsDto {
     username: string;
     password: string;
-}
-
-export class Login {
-    username: string;
-    password: string;
-}
-
-export class CreatePostInput {
-    text_body: string;
-    poster_id: string;
-}
-
-export class UpdatePostInput {
-    id: string;
-    text_body: string;
 }
 
 export class CreateUserInput {
@@ -37,33 +22,20 @@ export class UpdateUserInput {
     username: string;
 }
 
-export class SignupResponse {
-    token?: string;
+export class CreatePostInput {
+    text_body: string;
+    poster_id: string;
+}
+
+export class UpdatePostInput {
+    id: string;
+    text_body: string;
+}
+
+export class User {
+    id: string;
     username: string;
     password: string;
-}
-
-export class AuthPayload {
-    token?: string;
-    username: string;
-}
-
-export abstract class IMutation {
-    abstract signup(input: Signup): SignupResponse | Promise<SignupResponse>;
-
-    abstract login(input: Login): AuthPayload | Promise<AuthPayload>;
-
-    abstract createPost(createPostInput: CreatePostInput): Post | Promise<Post>;
-
-    abstract updatePost(updatePostInput: UpdatePostInput): Post | Promise<Post>;
-
-    abstract removePost(id: string): Post | Promise<Post>;
-
-    abstract createUser(createUserInput: CreateUserInput): User | Promise<User>;
-
-    abstract updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
-
-    abstract removeUser(id: string): User | Promise<User>;
 }
 
 export class Post {
@@ -73,17 +45,29 @@ export class Post {
 }
 
 export abstract class IQuery {
-    abstract posts(): Post[] | Promise<Post[]>;
+    abstract findAll(): User[] | Promise<User[]>;
 
-    abstract post(id: string): Post | Promise<Post>;
+    abstract findOne(id: string): User | Promise<User>;
 
-    abstract users(): User[] | Promise<User[]>;
+    abstract getAllPosts(): Post[] | Promise<Post[]>;
 
-    abstract user(id: string): User | Promise<User>;
+    abstract getPostById(id: string): Post | Promise<Post>;
 }
 
-export class User {
-    id: string;
-    username: string;
-    password: string;
+export abstract class IMutation {
+    abstract signup(input: AuthCredentialsDto): User | Promise<User>;
+
+    abstract login(input: AuthCredentialsDto): User | Promise<User>;
+
+    abstract create(createUserInput: CreateUserInput): User | Promise<User>;
+
+    abstract update(updateUserInput: UpdateUserInput): User | Promise<User>;
+
+    abstract remove(id: string): User | Promise<User>;
+
+    abstract createPost(createPostInput: CreatePostInput): Post | Promise<Post>;
+
+    abstract updatePost(updatePostInput: UpdatePostInput): Post | Promise<Post>;
+
+    abstract removePost(id: string): Post | Promise<Post>;
 }
