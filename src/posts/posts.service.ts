@@ -1,32 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
-import { PostsRepository } from './posts.repository';
+import { Post } from './entities/post.entity';
+// import { PostsRepository } from './posts.repository';
 
 @Injectable()
 export class PostsService {
   constructor(
-    @InjectRepository(PostsRepository)
-    private postsRepository: PostsRepository,
+    @InjectRepository(Post) private postsRepository: Repository<Post>,
   ) {}
   create(createPostInput: CreatePostInput) {
-    return this.postsRepository.createPost(createPostInput);
+    return this.postsRepository.create(createPostInput);
   }
 
   findAll() {
-    return this.postsRepository.getPosts();
+    return this.postsRepository.find({
+      relations: ['users'],
+    });
   }
 
+  // findUserPosts(poster_id: any) {
+  //   return this, this.postsRepository.getUserPosts(poster_id);
+  // }
+
   findOne(id: string) {
-    return this.postsRepository.getPost(id);
+    return this.postsRepository.findOne(id, { relations: ['users'] });
   }
 
   updatePost(id: string, updatePostInput: UpdatePostInput) {
-    return this.postsRepository.updatePost(id, updatePostInput);
+    const post: Post = this.postsRepository.create(updatePostInput);
+    post.id = id;
+    return this.postsRepository.save(post);
   }
 
-  remove(id: string) {
-    return this.postsRepository.removePost(id);
+  async remove(id: string) {
+    const post = this.findOne(id);
+    if (post) {
+      const ret = await this.postsRepository.delete(id);
+      if (ret.affected === 1) {
+        return post;
+      }
+    }
+    throw new NotFoundException(`Record cannot find by id ${id}`);
   }
 }
