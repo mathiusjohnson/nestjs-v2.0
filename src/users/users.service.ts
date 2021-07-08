@@ -1,39 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/posts/entities/post.entity';
-import { PostsService } from 'src/posts/posts.service';
+import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { UsersRepository } from './users.repository';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
-    private postsService: PostsService,
+    @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
+
   create(createUserInput: CreateUserInput) {
-    return this.usersRepository.createUser(createUserInput);
+    return this.usersRepository.create(createUserInput);
   }
 
-  findAll() {
-    return this.usersRepository.getUsers();
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find({
+      relations: ['posts'],
+    });
   }
 
   findOne(id: string) {
-    return this.usersRepository.getUser(id);
+    return this.usersRepository.findOne(id);
   }
 
   updateUserName(id: string, updateUserInput: UpdateUserInput) {
-    return this.usersRepository.updateUserName(id, updateUserInput);
+    const user: User = this.usersRepository.create(updateUserInput);
+    return this.usersRepository.save(user);
   }
 
-  remove(id: string) {
-    return this.usersRepository.removeUser(id);
+  async remove(id: string) {
+    const user = this.findOne(id);
+    if (user) {
+      const ret = await this.usersRepository.delete(id);
+      if (ret.affected === 1) {
+        return user;
+      }
+    }
+    throw new NotFoundException(`Record cannot find by id ${id}`);
   }
 
-  // getUserPosts(id: string): Promise<Post[]> {
-  //   return this.postsService.findUserPosts({ poster_id: id });
+  // async getUserPosts(id: string): Promise<Post> {
+  //   return this.postsService.findOne(id);
   // }
 }
