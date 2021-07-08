@@ -8,13 +8,12 @@ import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { AuthController } from './auth.controller';
 import { UsersResolver } from '../users/users.resolver';
-import { UsersRepository } from '../users/users.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from '../users/users.service';
 import { UsersModule } from '../users/users.module';
-import { PostsService } from 'src/posts/posts.service';
 import { PostsModule } from 'src/posts/posts.module';
 import { Post } from 'src/posts/entities/post.entity';
+import { User } from 'src/users/entities/user.entity';
 // import { PostsRepository } from 'src/posts/posts.repository';
 
 @Module({
@@ -31,7 +30,7 @@ import { Post } from 'src/posts/entities/post.entity';
         },
       }),
     }),
-    TypeOrmModule.forFeature([UsersRepository, Post]),
+    TypeOrmModule.forFeature([User, Post]),
     UsersModule,
     PostsModule,
   ],
@@ -41,7 +40,6 @@ import { Post } from 'src/posts/entities/post.entity';
     UsersService,
     AuthResolver,
     UsersResolver,
-    PostsService,
   ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],
