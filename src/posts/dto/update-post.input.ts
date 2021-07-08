@@ -7,5 +7,5 @@ export class UpdatePostInput extends PartialType(CreatePostInput) {
   id: string;
 
   @Field()
-  text_body: string;
+  textBody: string;
 }

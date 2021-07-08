@@ -5,9 +5,9 @@ import { IsString } from 'class-validator';
 export class CreatePostInput {
   @Field()
   @IsString()
-  text_body: string;
+  textBody: string;
 
   @Field()
   @IsString()
-  poster_id: string;
+  posterId: string;
 }
