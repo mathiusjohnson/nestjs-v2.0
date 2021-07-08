@@ -7,6 +7,7 @@ type User {
   username: String!
   password: String!
   posts: [Post!]
+  user: Post!
 }
 
 type Post {
@@ -14,7 +15,6 @@ type Post {
   textBody: String!
   posterId: String!
   user: User!
-  post: User!
 }
 
 type Query {

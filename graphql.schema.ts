@@ -32,6 +32,7 @@ export class User {
     username: string;
     password: string;
     posts?: Post[];
+    user: Post;
 }
 
 export class Post {
@@ -39,7 +40,6 @@ export class Post {
     textBody: string;
     posterId: string;
     user: User;
-    post: User;
 }
 
 export abstract class IQuery {
