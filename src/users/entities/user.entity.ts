@@ -21,3 +21,15 @@ export class User {
   @Field(() => [Post], { nullable: true })
   posts: Post[];
 }
+@ObjectType()
+export class AuthPayload {
+  @Field()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Field()
+  token: string;
+
+  @Field()
+  user: User;
+}
