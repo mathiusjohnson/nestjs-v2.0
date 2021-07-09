@@ -8,6 +8,7 @@ import { Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { ConfigService } from 'src/config/config.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     @InjectRepository(User) private usersRepository: Repository<User>,
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async signUp(username: string, password: string): Promise<User> {
@@ -25,17 +27,19 @@ export class AuthService {
 
   async signIn(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ token: string; user: User }> {
+  ): Promise<{ token: string; user: User; expiresIn: number }> {
     const { username, password } = authCredentialsDto;
     // const id = 'test';
     const user = await this.usersService.findUserSignIn(username);
     const logger = new Logger();
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      const expiresIn = 3600;
       const payload: JwtPayload = { username };
-      const token: string = await this.jwtService.sign(payload);
+      const token: string = await this.createJwt(user!).token;
       logger.log(`user access token: ${token}`);
-      return { token, user };
+
+      return { token, user, expiresIn };
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
@@ -51,6 +55,27 @@ export class AuthService {
   }
 
   /**
+   * Verifies that the JWT payload associated with a JWT is valid by making sure the user exists and is enabled
+   *
+   * @param {JwtPayload} payload
+   * @returns {(Promise<UserDocument | undefined>)} returns undefined if there is no user or the account is not enabled
+   * @memberof AuthService
+   */
+  async validateJwtPayload(payload: JwtPayload): Promise<User | undefined> {
+    // This will be used when the user has already logged in and has a JWT
+    const user = await this.usersService.findUserSignIn(payload.username);
+
+    // Ensure the user exists and their account isn't disabled
+    if (user && user.enabled) {
+      user.lastSeenAt = new Date();
+      // user.save();
+      return user;
+    }
+
+    return undefined;
+  }
+
+  /**
    * Creates a JwtPayload for the given User
    *
    * @param {User} user
@@ -59,23 +84,23 @@ export class AuthService {
    * token created by signing the data.
    * @memberof AuthService
    */
-  // createJwt(user: User): { data: JwtPayload; token: string } {
-  //   const expiresIn = this.configService.jwtExpiresIn;
-  //   let expiration: Date | undefined;
-  //   if (expiresIn) {
-  //     expiration = new Date();
-  //     expiration.setTime(expiration.getTime() + expiresIn * 1000);
-  //   }
-  //   const data: JwtPayload = {
-  //     username: user.username,
-  //     expiration,
-  //   };
+  createJwt(user: User): { data: JwtPayload; token: string } {
+    const expiresIn = this.configService.jwtExpiresIn;
+    let expiration: Date | undefined;
+    if (expiresIn) {
+      expiration = new Date();
+      expiration.setTime(expiration.getTime() + expiresIn * 1000);
+    }
+    const data: JwtPayload = {
+      username: user.username,
+      expiration,
+    };
 
-  //   const jwt = this.jwtService.sign(data);
+    const jwt = this.jwtService.sign(data);
 
-  //   return {
-  //     data,
-  //     token: jwt,
-  //   };
-  // }
+    return {
+      data,
+      token: jwt,
+    };
+  }
 }
