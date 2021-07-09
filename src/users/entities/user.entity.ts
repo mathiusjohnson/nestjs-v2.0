@@ -20,6 +20,12 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   @Field(() => [Post], { nullable: true })
   posts: Post[];
+
+  @Field()
+  enabled: boolean;
+
+  @Field()
+  lastSeenAt: Date;
 }
 @ObjectType()
 export class AuthPayload {
@@ -29,6 +35,9 @@ export class AuthPayload {
 
   @Field()
   token: string;
+
+  @Field()
+  expiration: number;
 
   @Field()
   user: User;
