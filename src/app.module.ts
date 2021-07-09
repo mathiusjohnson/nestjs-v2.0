@@ -13,7 +13,7 @@ import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
-    // AuthModule,
+    AuthModule,
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRootAsync({
