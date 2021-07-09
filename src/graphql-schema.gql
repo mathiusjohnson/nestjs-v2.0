@@ -9,6 +9,12 @@ type User {
   posts: [Post!]
 }
 
+type AuthPayload {
+  id: String!
+  token: String!
+  user: User!
+}
+
 type Post {
   id: String!
   textBody: String!
@@ -25,12 +31,19 @@ type Query {
 }
 
 type Mutation {
+  signUp(input: AuthCredentialsDto!): User!
+  login(input: AuthCredentialsDto!): AuthPayload!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: String!): Post!
+}
+
+input AuthCredentialsDto {
+  username: String!
+  password: String!
 }
 
 input CreateUserInput {

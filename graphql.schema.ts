@@ -7,6 +7,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export class AuthCredentialsDto {
+    username: string;
+    password: string;
+}
+
 export class CreateUserInput {
     username: string;
     password: string;
@@ -34,6 +39,12 @@ export class User {
     posts?: Post[];
 }
 
+export class AuthPayload {
+    id: string;
+    token: string;
+    user: User;
+}
+
 export class Post {
     id: string;
     textBody: string;
@@ -54,6 +65,10 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
+    abstract signUp(input: AuthCredentialsDto): User | Promise<User>;
+
+    abstract login(input: AuthCredentialsDto): AuthPayload | Promise<AuthPayload>;
+
     abstract createUser(createUserInput: CreateUserInput): User | Promise<User>;
 
     abstract updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
