@@ -16,7 +16,7 @@ export class Post {
   id: string;
 
   @Field()
-  @Column({ unique: true })
+  @Column()
   textBody: string;
 
   @Field()
