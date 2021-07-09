@@ -6,17 +6,15 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
+import { Logger, Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
+import { Request } from 'express';
+
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Logger, Req, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
-import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { Request } from 'express';
-
 @Resolver(() => Post)
 export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
@@ -47,12 +45,17 @@ export class PostsResolver {
   }
 
   @Mutation((returns) => Post, { name: 'updatePost' })
-  update(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
+  @UseGuards(JwtAuthGuard)
+  update(
+    @Req() req: Request,
+    @Args('updatePostInput') updatePostInput: UpdatePostInput,
+  ) {
     return this.postsService.updatePost(updatePostInput.id, updatePostInput);
   }
 
   @Mutation((returns) => Post, { name: 'removePost' })
-  remove(@Args('id') id: string) {
+  @UseGuards(JwtAuthGuard)
+  remove(@Req() req: Request, @Args('id') id: string) {
     return this.postsService.remove(id);
   }
 
