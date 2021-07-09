@@ -65,8 +65,6 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
-    abstract signUp(input: AuthCredentialsDto): User | Promise<User>;
-
     abstract login(input: AuthCredentialsDto): AuthPayload | Promise<AuthPayload>;
 
     abstract createUser(createUserInput: CreateUserInput): User | Promise<User>;

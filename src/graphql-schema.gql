@@ -31,7 +31,6 @@ type Query {
 }
 
 type Mutation {
-  signUp(input: AuthCredentialsDto!): User!
   login(input: AuthCredentialsDto!): AuthPayload!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
