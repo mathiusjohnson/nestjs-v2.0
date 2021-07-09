@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { User } from 'src/users/entities/user.entity';
+import { AuthPayload, User } from 'src/users/entities/user.entity';
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -18,7 +18,7 @@ export class AuthResolver {
     );
     return this.authService.signUp(authCredentialsDto);
   }
-  @Mutation((returns) => User, { name: 'login' })
+  @Mutation((returns) => AuthPayload, { name: 'login' })
   login(@Args('input') authCredentialsDto: AuthCredentialsDto) {
     const logger = new Logger('sign in controller');
 
