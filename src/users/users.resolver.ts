@@ -11,8 +11,10 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Post } from 'src/posts/entities/post.entity';
-import { forwardRef, Inject, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Logger, Req, UseGuards } from '@nestjs/common';
 import { PostsService } from 'src/posts/posts.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
+import { Request } from 'express';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -38,7 +40,11 @@ export class UsersResolver {
   }
 
   @Mutation(() => User, { name: 'updateUser' })
-  update(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+  @UseGuards(JwtAuthGuard)
+  update(
+    @Req() req: Request,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
     return this.usersService.updateUserName(
       updateUserInput.id,
       updateUserInput,
