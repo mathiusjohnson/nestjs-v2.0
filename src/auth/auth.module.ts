@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
-import { AuthController } from './auth.controller';
 import { UsersResolver } from '../users/users.resolver';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from '../users/users.service';
@@ -41,7 +40,6 @@ import { User } from 'src/users/entities/user.entity';
     AuthResolver,
     UsersResolver,
   ],
-  controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],
 })
 export class AuthModule {}
