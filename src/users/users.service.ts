@@ -26,6 +26,10 @@ export class UsersService {
     return this.usersRepository.findOne(id, { relations: ['posts'] });
   }
 
+  findUserSignIn(username: string) {
+    return this.usersRepository.findOne({ username });
+  }
+
   updateUserName(id: string, updateUserInput: UpdateUserInput) {
     const user: User = this.usersRepository.create(updateUserInput);
     return this.usersRepository.save(user);
