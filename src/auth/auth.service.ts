@@ -28,8 +28,8 @@ export class AuthService {
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ token: string }> {
     const { username, password } = authCredentialsDto;
-    const id = 'test';
-    const user = await this.usersService.findOne(id);
+    // const id = 'test';
+    const user = await this.usersService.findUserSignIn(username);
     const logger = new Logger();
 
     if (user && (await bcrypt.compare(password, user.password))) {
