@@ -20,7 +20,6 @@ export class CreateUserInput {
 export class UpdateUserInput {
     id: string;
     username: string;
-    lastSeenAt: DateTime;
 }
 
 export class CreatePostInput {
@@ -39,7 +38,6 @@ export class User {
     password: string;
     posts?: Post[];
     enabled: boolean;
-    lastSeenAt: DateTime;
 }
 
 export class AuthPayload {
@@ -83,5 +81,3 @@ export abstract class IMutation {
 
     abstract removePost(id: string): Post | Promise<Post>;
 }
-
-export type DateTime = any;
