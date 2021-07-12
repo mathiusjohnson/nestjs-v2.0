@@ -67,7 +67,7 @@ export class AuthService {
 
     // Ensure the user exists and their account isn't disabled
     if (user && user.enabled) {
-      user.lastSeenAt = new Date();
+      // user.lastSeenAt = new Date();
       // user.save();
       return user;
     }
