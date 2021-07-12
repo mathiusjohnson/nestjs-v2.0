@@ -26,6 +26,9 @@ export class PostsResolver {
     // @GetUser() user: User,
     @Args('createPostInput') createPostInput: CreatePostInput,
   ) {
+    const logger = new Logger('CreatePostResolver');
+
+    logger.log(`create post hit with ${JSON.stringify(createPostInput)}`);
     return this.postsService.create(createPostInput);
   }
 
@@ -50,6 +53,9 @@ export class PostsResolver {
     @Req() req: Request,
     @Args('updatePostInput') updatePostInput: UpdatePostInput,
   ) {
+    const logger = new Logger('CreatePostResolver');
+
+    logger.log(`update post hit with ${JSON.stringify(updatePostInput)}`);
     return this.postsService.updatePost(updatePostInput.id, updatePostInput);
   }
 
