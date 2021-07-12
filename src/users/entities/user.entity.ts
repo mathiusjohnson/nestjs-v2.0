@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Post } from 'src/posts/entities/post.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -24,8 +25,9 @@ export class User {
   @Field()
   enabled: boolean;
 
-  @Field()
-  lastSeenAt: Date;
+  // @Field()
+  // @Optional()
+  // lastSeenAt: Date;
 }
 @ObjectType()
 export class AuthPayload {
