@@ -22,3 +22,11 @@ type Mutation {
 schema {
   query: Query
 }
+
+type Ping {
+  id: ID
+}
+
+type Pong {
+  pingId: ID
+}
