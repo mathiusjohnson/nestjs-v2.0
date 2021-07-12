@@ -9,6 +9,6 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   @Field()
   username?: string;
 
-  @Field()
-  lastSeenAt?: Date;
+  // @Field()
+  // lastSeenAt?: Date;
 }
