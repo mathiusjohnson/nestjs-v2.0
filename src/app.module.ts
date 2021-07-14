@@ -3,16 +3,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { PubSub } from 'graphql-subscriptions';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmConfigService } from './config/typeorm.config.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
+import { PubSub } from 'graphql-subscriptions';
 
-const pubsub = new PubSub();
-
+export const PUB_SUB = 'PUB_SUB';
 @Module({
   imports: [
     AuthModule,
@@ -44,8 +43,9 @@ const pubsub = new PubSub();
   providers: [
     AppService,
     {
-      provide: 'PUB_SUB',
-      useValue: new PubSub(),
+      provide: PUB_SUB,
+      useFactory: (configService: ConfigService) => new PubSub({}),
+      inject: [ConfigService],
     },
   ],
 })
