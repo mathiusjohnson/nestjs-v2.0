@@ -81,3 +81,11 @@ export abstract class IMutation {
 
     abstract removePost(id: string): Post | Promise<Post>;
 }
+
+export abstract class ISubscription {
+    abstract postAdded(): Post | Promise<Post>;
+
+    abstract postUpdated(): Post | Promise<Post>;
+
+    abstract postDeleted(): Post | Promise<Post>;
+}
