@@ -66,3 +66,9 @@ input UpdatePostInput {
   id: String!
   textBody: String!
 }
+
+type Subscription {
+  postAdded: Post!
+  postUpdated: Post!
+  postDeleted: Post!
+}
