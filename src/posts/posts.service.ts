@@ -20,6 +20,7 @@ export class PostsService {
     private usersService: UsersService,
     @InjectRepository(Post) private postsRepository: Repository<Post>,
   ) {}
+
   create(createPostInput: CreatePostInput) {
     return this.postsRepository.save(createPostInput);
   }

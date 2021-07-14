@@ -5,8 +5,10 @@ import {
   Args,
   ResolveField,
   Parent,
+  Subscription,
 } from '@nestjs/graphql';
 import { Logger, Req, UseGuards } from '@nestjs/common';
+import { PubSub } from 'graphql-subscriptions';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
 import { Request } from 'express';
 
@@ -15,6 +17,9 @@ import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
+
+const pubSub = new PubSub();
+
 @Resolver(() => Post)
 export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
@@ -29,7 +34,14 @@ export class PostsResolver {
     const logger = new Logger('CreatePostResolver');
 
     logger.log(`create post hit with ${JSON.stringify(createPostInput)}`);
-    return this.postsService.create(createPostInput);
+    const newPost = this.postsService.create(createPostInput);
+    pubSub.publish('postAdded', { postAdded: newPost });
+    return newPost;
+  }
+
+  @Subscription((returns) => Post)
+  postAdded() {
+    return pubSub.asyncIterator('postAdded');
   }
 
   @Query((returns) => [Post], { name: 'getAllPosts' })
@@ -59,10 +71,20 @@ export class PostsResolver {
     return this.postsService.updatePost(updatePostInput.id, updatePostInput);
   }
 
+  @Subscription((returns) => Post)
+  postUpdated() {
+    return pubSub.asyncIterator('postUpdated');
+  }
+
   @Mutation((returns) => Post, { name: 'removePost' })
   @UseGuards(JwtAuthGuard)
   remove(@Req() req: Request, @Args('id') id: string) {
     return this.postsService.remove(id);
+  }
+
+  @Subscription((returns) => Post)
+  postDeleted() {
+    return pubSub.asyncIterator('postDeleted');
   }
 
   @ResolveField((type) => User)
